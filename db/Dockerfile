@@ -1,0 +1,3 @@
+FROM mariadb:10.6.3
+
+ONBUILD RUN mkdir ${DB_DATA_PATH_CONTAINER}

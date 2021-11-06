@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  mariadb:
+    build: ./db
+    container_name: mariadb
+    ports:
+      - ${MARIADB_PORT_HOST}:${MARIADB_PORT_CONTAINER}
+    volumes:
+      - ./db/dbData:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: always
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - ${APP_PORT_ADMINER_HOST}:${APP_PORT_ADMINER_CONTAINER}
+  php:
+    build: ./php7.4-fpm
+    container_name: php
+    volumes:
+      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+    links:
+      - mariadb
+      - memcached
+    restart: always
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    links:
+      - php
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+    ports:
+      - ${NGINX_HTTP_HOST}:${NGINX_HTTP_CONTAINER}
+      - ${NGINX_HTTPS_HOST}:${NGINX_HTTPS_CONTAINER}
+    restart: always
+  memcached:
+    image: memcached:alpine
+    container_name: memcached
+    ports:
+      - ${MEMCACHED_PORT_HOST}:${MEMCACHED_PORT_CONTAINER}
+    restart: always
+
+
+
+
