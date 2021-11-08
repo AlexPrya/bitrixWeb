@@ -1,2 +1,4 @@
 .idea/*
-db/dbdata/*
+/db/dbdata/*
+!/app/default
+/app/*
