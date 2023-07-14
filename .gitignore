@@ -2,3 +2,4 @@
 /db/dbdata/*
 !/app/default
 /app/*
+*.DS_Store
